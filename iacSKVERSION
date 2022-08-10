@@ -1,0 +1,2 @@
+#!/bin/bash
+echo "POWERED BY: Zied BEN SALEM / Docker version --> iacSuissKnife: $iacSKVERSION" | lolcat -F 0.3

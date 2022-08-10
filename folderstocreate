@@ -1,0 +1,4 @@
+.azure
+.aws
+.config/openstack
+.terraform.d/plugins/mantu/iac/api/1.0/linux_amd64
