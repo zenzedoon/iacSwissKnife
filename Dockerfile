@@ -80,12 +80,16 @@ RUN  \
 # Install Kubectl
 ################################
 RUN \
-    curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg && \
-    apt-get update && apt-get install -y kubectl && \
-    kubectl version 
-
-
-COPY ConfigFiles/iacSKRoleInit /usr/bin/
-COPY ConfigFiles/iacSKVERSION /usr/bin/
-COPY ConfigFiles/* /tmp/
+    apt-get update && \
+    curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && \
+    chmod +x ./kubectl && \
+    mv ./kubectl /usr/local/bin && \
+    echo "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" && \ 
+    kubectl version --client 
+################################
+# Config files
+################################
+COPY ./BinFiles/iacSKRoleInit /usr/bin/iacSKRoleInit
+COPY ./BinFiles/iacSKVERSION /usr/bin/iacSKVERSION
+COPY ./ConfigFiles/* /tmp/
 CMD ["chmod+x /usr/bin/SKRoleInit && chmod+x /usr/bin/SKVERSION"] 
