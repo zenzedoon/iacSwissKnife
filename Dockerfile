@@ -85,7 +85,7 @@ RUN \
     kubectl version 
 
 
-COPY iacSKRoleInit /usr/bin/
-COPY iacSKVERSION /usr/bin/
-COPY iacSKHelp /tmp/ 
+COPY ConfigFiles/iacSKRoleInit /usr/bin/
+COPY ConfigFiles/iacSKVERSION /usr/bin/
+COPY ConfigFiles/* /tmp/
 CMD ["chmod+x /usr/bin/SKRoleInit && chmod+x /usr/bin/SKVERSION"] 

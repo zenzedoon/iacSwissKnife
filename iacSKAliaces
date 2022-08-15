@@ -35,16 +35,15 @@ iacSKVERSION=v1.0
 
 alias iacSKHelp='docker run -t --rm "$iacSKIMG":"$iacSKVERSION" cat /tmp/iacSKHelp | lolcat -F 1'
 alias iacSKVersion='docker run -t -e iacSKVERSION=$iacSKVERSION --rm "$iacSKIMG":"$iacSKVERSION" iacSKVERSION'
-# alias iacSKRoleInit='docker run -it -v "${PWD}":/work -v ~/.ssh:/root/.ssh -v $(dirname $SSH_AUTH_SOCK):$(dirname $SSH_AUTH_SOCK) -e SSH_AUTH_SOCK=$SSH_AUTH_SOCK --rm "$iacSKIMG":"$iacSKVERSION" /bin/bash -c "iacroleinit ; chown -R $(id -u):$(id -g) ./* ./.[!.]*"'
+alias iacSKRoleInit='docker run -it -v "${PWD}":/work -v ~/.ssh:/root/.ssh -v $(dirname $SSH_AUTH_SOCK):$(dirname $SSH_AUTH_SOCK) -e SSH_AUTH_SOCK=$SSH_AUTH_SOCK --rm "$iacSKIMG":"$iacSKVERSION" /bin/bash -c "iacroleinit ; chown -R $(id -u):$(id -g) ./* ./.[!.]*"'
 
 
 ######################################
 #             SETUP ALIAS            #
 ######################################
 
-#alias iacInit='docker run -t -v ~/:/work -v /usr/local/bin/:/usr/local/bin/ --rm "$iacSKIMG":"$iacSKVERSION" /bin/bash -c "mkdir -p \`cat /setup/foldersToCreate\` ; touch \`cat /setup/filesToCreate\` ; chown -R $(id -u):$(id -g) \`cut -d"/" -f1 /setup/foldersToCreate /setup/filesToCreate\` ; cat /setup/vsansible-vault > /usr/local/bin/vsansible-vault ; chmod +x /usr/local/bin/vsansible-vault"'
-#alias iacSKPullAliasBashrc='docker run -d --name tmp --rm "$iacSKIMG":"$iacSKVERSION" /bin/sh -c "while true; do sleep 2; df -h; done" && docker exec tmp git clone https://svcSetupIAC:mdAz5ZsIwB5R5qO6@gitlab.mantu.cloud/iac/docker-iac-setup.git && docker cp tmp:/work/docker-iac-setup/files/iacalias ~/.iacalias && docker rm tmp --force && source ~/.bashrc'
-#alias iacSKPullAliasZshrc='docker run -d --name tmp --rm "$iacSKIMG":"$iacSKVERSION" /bin/sh -c "while true; do sleep 2; df -h; done" && docker exec tmp git clone https://svcSetupIAC:mdAz5ZsIwB5R5qO6@gitlab.mantu.cloud/iac/docker-iac-setup.git && docker cp tmp:/work/docker-iac-setup/files/iacalias ~/.iacalias && docker rm tmp --force && source ~/.zshrc'
+alias iacInit='docker run -t -v ~/:/work -v /usr/local/bin/:/usr/local/bin/ --rm "$iacSKIMG":"$iacSKVERSION" /bin/bash -c "mkdir -p \`cat /tmp/foldersToCreate\` ; touch \`cat /tmp/filesToCreate\` ; chown -R $(id -u):$(id -g) \`cut -d"/" -f1 /tmp/foldersToCreate /tmp/filesToCreate\` ; cat /tmp/vsansible-vault > /usr/local/bin/vsansible-vault ; chmod +x /usr/local/bin/vsansible-vault"'
+alias iacSKPullAliasBashrc='docker run -d --name tmp --rm "$iacSKIMG":"$iacSKVERSION" /bin/sh -c "wget https://raw.githubusercontent.com/zenzedoon/iacSwissKnife/main/iacSKAliaces && cp iacSKAliaces ~/.iacSKAliaces && source ~/.bashrc "'
 
 
 ######################################

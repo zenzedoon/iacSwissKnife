@@ -3,8 +3,8 @@ import os
 import argparse
 from posix import listdir
 import shutil
-from colorama import Fore
-from colorama import Style
+# from colorama import Fore
+# from colorama import Style
 
 parser = argparse.ArgumentParser(
     description='IAC Ansible role initiator')
@@ -199,85 +199,3 @@ else:
     f = open(yamllintToCreate, "a")
     f.write(content)
     f.close
-
-
-if nomolecule is False:
-
-    # Molecule init
-
-    moleculeInit = input(
-        "Do you want to add a molecule scenario ?: [yes | no] ")
-
-    if moleculeInit.lower() == "yes":
-
-        extraRole = "yes"
-        tmpfolder = "tmpmolecule"
-
-        # Git clone only when the model_molecule repository is not already cloned
-        if not os.path.isdir(os.path.join(currentDirectory, tmpfolder)):
-            os.mkdir(tmpfolder)
-            command = "git clone git@gitlab.mantu.cloud:ansible/model_molecule.git " + tmpfolder
-            os.system(command)
-
-        # If the user say "yes" or if it is the first time
-        while extraRole == "yes":
-            moleculeCloud = listdir(tmpfolder)
-
-            # Remove .git / .gitignore useless folder
-            filteredMoleculeEnvironment = [
-                environment for environment in moleculeCloud if not environment.startswith(".")]
-
-            moleculeEnvironment = ""
-
-            # Choose a cloud environment
-            while moleculeEnvironment not in filteredMoleculeEnvironment:
-
-                moleculeEnvironment = input(
-                    f"On which private/public cloud do you want your molecule ?  {Fore.GREEN}[" + "|".join(filteredMoleculeEnvironment) + f"] {Style.RESET_ALL}")
-
-                if moleculeEnvironment not in filteredMoleculeEnvironment:
-                    print(
-                        f"Ahah really {Fore.GREEN}FUNNY{Style.RESET_ALL}, can we {Fore.RED}WORK{Style.RESET_ALL} now ? ")
-
-            moleculeScenarios = listdir(os.path.join(
-                currentDirectory, tmpfolder, moleculeEnvironment))
-
-            moleculeScenario = ""
-
-            # Choose a scenario
-            while moleculeScenario not in moleculeScenarios:
-
-                moleculeScenario = input(
-                    f"Which scenario do you need ? {Fore.GREEN}[" + "|".join(moleculeScenarios) + f"] {Style.RESET_ALL}")
-
-                if moleculeScenario not in moleculeScenarios:
-                    print(
-                        f"Ahah really {Fore.GREEN}FUNNY{Style.RESET_ALL}, can we {Fore.RED}WORK{Style.RESET_ALL} now ? ")
-
-            # Name your scenario and check if it doesn't already exist
-            destinationScenario = input(
-                "How do you want to call your scenario ? (if empty : default) ")
-
-            if destinationScenario == "":
-                destinationScenario = "default"
-
-            if os.path.isdir(os.path.join(currentDirectory, "molecule")):
-
-                while destinationScenario in os.listdir(os.path.join(currentDirectory, "molecule")):
-                    destinationScenario = input(
-                        "This scenario name already exists , please choose another one ")
-
-                    if destinationScenario == "":
-                        destinationScenario = "default"
-
-            if not os.path.isdir(os.path.join(currentDirectory, "molecule")):
-                os.mkdir("molecule")
-
-            # Copy the needed scenario
-            shutil.copytree(os.path.join(currentDirectory, tmpfolder,
-                            moleculeEnvironment, moleculeScenario, "molecule", "default"), os.path.join(currentDirectory, "molecule", destinationScenario))
-
-            extraRole = input(
-                "Do you want to add another scenario ? [yes | no] ? ")
-
-        shutil.rmtree(tmpfolder, ignore_errors=True)
