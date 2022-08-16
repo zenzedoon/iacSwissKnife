@@ -1,1 +1,28 @@
-Help for the iacSWISSKNIFE tools 
+ iacSKHelp
+-------------------------------------------------------------------------------------
+
+- iacSKVersion
+
+    Display the docker iac image you are using.
+
+-------------------------------------------------------------------------------------
+
+- iacSKRoleInit
+
+    Create/Update an ansible role whit ansible file tree, .gitignore and molecule
+
+-------------------------------------------------------------------------------------
+
+- iacSKInit
+
+    Initialise all folders and files needed inside your Ubuntu/Debian/Mac for docker.
+    To run only if: you have newly installed docker iac or you have deleted some required files/folders.
+
+-------------------------------------------------------------------------------------
+
+- iacSKPullAliasBashrc
+
+    Download/Update aliases used to run docker and source them.
+    !!! Run only if you are using bashrc shell !!!
+
+-------------------------------------------------------------------------------------

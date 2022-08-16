@@ -1,2 +1,2 @@
 #!/bin/bash
-echo "POWERED BY: Zied BEN SALEM / Docker version --> iacSuissKnife: $iacSKVERSION" | lolcat -F 0.3
+echo "POWERED BY: Zied BEN SALEM / Docker version --> iacSuissKnife: $iacSKVERSION" | /usr/games/cowsay -f dragon-and-cow | lolcat -F 2

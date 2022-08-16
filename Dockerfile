@@ -14,16 +14,14 @@ RUN \
     # vim
     apt-get install nano -y && \
     # curl
-    apt-get install curl -y && apt-get install lolcat -y
+    apt-get install curl -y 
 
 ################################
 # Install LOLCAT
 ################################
 RUN \
     apt-get update -y && \
-    apt-get install ruby -y && \
-    wget https://github.com/busyloop/lolcat/archive/master.zip && \
-    unzip master.zip && cd lolcat-master/bin/ \
+    apt-get install lolcat -y && apt-get install cowsay -y && \
     gem install lolcat
 
 ################################
@@ -80,16 +78,17 @@ RUN  \
 # Install Kubectl
 ################################
 RUN \
-    apt-get update && \
+    apt-get update  && \
     curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && \
     chmod +x ./kubectl && \
-    mv ./kubectl /usr/local/bin && \
-    echo "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" && \ 
+    mv ./kubectl /usr/local/bin && \ 
     kubectl version --client 
 ################################
 # Config files
 ################################
-COPY ./BinFiles/iacSKRoleInit /usr/bin/iacSKRoleInit
-COPY ./BinFiles/iacSKVERSION /usr/bin/iacSKVERSION
+COPY ./BinFiles/* /usr/bin/ 
+COPY ./iacSKHelp /tmp/iacSKHelp
 COPY ./ConfigFiles/* /tmp/
-CMD ["chmod+x /usr/bin/SKRoleInit && chmod+x /usr/bin/SKVERSION"] 
+RUN chmod +x /usr/bin/iacSKRoleInit && \
+    sed -i -e 's/\r$//' /usr/bin/iacSKVERSION && \
+    chmod +x /usr/bin/iacSKVERSION
