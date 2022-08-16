@@ -16,6 +16,14 @@ To Install the iacswissknife please run this commands:
 #### *wgt https://raw.githubusercontent.com/zenzedoon/iacSwissKnife/main/iacSKAliaces -o ~/.iacSKALiaces*
 #### *echo "source ~/.iacSKALiaces" >> ~/.bashrc* 
 #### *source ~/.bashrc*
+# List of Integrated IAC Tools:
+- Ansible
+- Molecule
+- Terraform
+- Azure CLI
+- AWS CLI
+- Git
+- Kubectl 
 
 # Author
 ### *Zied BEN SALEM* 
