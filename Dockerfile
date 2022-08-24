@@ -1,6 +1,6 @@
 FROM python:slim-bullseye
 LABEL maintainer="Zied BEN SALEM"
-WORKDIR /project
+WORKDIR /work
 ################################
 # Install tools
 ################################
@@ -47,9 +47,10 @@ RUN \
 # Install AWS CLI
 ################################
 RUN \
-    pip install awscli --upgrade --user && \ 
+    # pip install awscli --upgrade --user && \ 
+    apt-get install awscli &&\
     # add aws cli location to path
-    PATH=~/.local/bin:$PATH  && \
+    # PATH=~/.local/bin:$PATH  && \
     # Check that aws is installed 
     aws --version
 
