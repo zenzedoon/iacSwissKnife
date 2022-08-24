@@ -1,2 +1,3 @@
 #!/bin/bash
-echo "POWERED BY: Zied BEN SALEM / Docker version --> iacSuissKnife: $iacSKVERSION" | /usr/games/cowsay -f dragon-and-cow | lolcat -F 2
+figlet IACSwissKnife Docker Tool | lolcat
+echo "POWERED BY: Zied BEN SALEM / Docker version --> iacSuissKnife: $iacSKVERSION" | /usr/games/cowsay -f dragon-and-cow | lolcat 

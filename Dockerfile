@@ -21,7 +21,7 @@ RUN \
 ################################
 RUN \
     apt-get update -y && \
-    apt-get install lolcat -y && apt-get install cowsay -y && \
+    apt-get install lolcat -y && apt-get install cowsay -y && apt-get install figlet && \
     gem install lolcat
 
 ################################
@@ -89,6 +89,6 @@ RUN \
 COPY ./BinFiles/* /usr/bin/ 
 COPY ./iacSKHelp /tmp/iacSKHelp
 COPY ./ConfigFiles/* /tmp/
-RUN chmod +x /usr/bin/iacSKRoleInit && \
+RUN chmod 777 /usr/bin/iacSKRoleInit && \
     sed -i -e 's/\r$//' /usr/bin/iacSKVERSION && \
-    chmod +x /usr/bin/iacSKVERSION
+    chmod 777 /usr/bin/iacSKVERSION
