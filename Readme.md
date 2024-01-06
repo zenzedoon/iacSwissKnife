@@ -13,7 +13,7 @@ To get the iacswissknife on your system you must have some prerequests:
 # Setup of iacswissknife
 
 To Install the iacswissknife please run this commands:
-#### *wgt https://raw.githubusercontent.com/zenzedoon/iacSwissKnife/main/iacSKAliaces -o ~/.iacSKALiaces*
+#### *wget https://raw.githubusercontent.com/zenzedoon/iacSwissKnife/main/iacSKAliaces -o ~/.iacSKALiaces*
 #### *echo "source ~/.iacSKALiaces" >> ~/.bashrc* 
 #### *source ~/.bashrc*
 # List of Integrated IAC Tools:
