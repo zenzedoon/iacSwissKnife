@@ -1,0 +1,201 @@
+#!/usr/bin/env python3
+import os
+import argparse
+from posix import listdir
+import shutil
+# from colorama import Fore
+# from colorama import Style
+
+parser = argparse.ArgumentParser(
+    description='IAC Ansible role initiator')
+
+parser.add_argument('-n', '--name', type=str,
+                    help='Ansible role name', required=False)
+
+parser.add_argument('--no-molecule', dest="nomolecule", action="store_true")
+
+parser.add_argument('--force', dest='force', action='store_true')
+
+arguments = parser.parse_args()
+
+if arguments.name is None:
+    name = input("What is your role name ? ")
+else:
+    name = arguments.name
+
+force = arguments.force
+nomolecule = arguments.nomolecule
+
+listOfDirectoriesToCreate = [
+    "defaults", "files", "handlers", "meta", "tasks", "templates", "tests", "vars"]
+currentDirectory = os.getcwd()
+
+for directory in listOfDirectoriesToCreate:
+
+    directoryToCreate = os.path.join(currentDirectory, directory)
+
+    if os.path.isdir(directoryToCreate) and force is False:
+        print("The following directory already exists: " + directory)
+    else:
+        if force == True:
+            shutil.rmtree(directoryToCreate, ignore_errors=True)
+
+        os.mkdir(directoryToCreate)
+
+
+# Init default main.yml files
+
+listOfDirectoriesToInitMain = [
+    "defaults", "handlers", "tests", "vars"
+]
+
+for directory in listOfDirectoriesToInitMain:
+
+    mainFileToCreate = os.path.join(currentDirectory, directory, "main.yml")
+    content = "---\n# " + directory + " file for " + name
+
+    if os.path.isfile(mainFileToCreate) and force is False:
+        print("The following main.yml file is already created: " + mainFileToCreate)
+    else:
+        if force == True:
+            if os.path.isfile(mainFileToCreate):
+                os.remove(mainFileToCreate)
+
+        f = open(mainFileToCreate, "a")
+        f.write(content)
+        f.close()
+
+
+# Init meta file
+
+metaFolder = "meta"
+
+content = """galaxy_info:
+  author: Your NAME
+  description: ROLE DESCRIPTION
+  company: Zenzedoon
+
+  license: Private
+
+  min_ansible_version: 2.11.X
+
+  platforms:
+  - name: Your Platform
+    versions:
+    - Your version
+
+  galaxy_tags: []
+
+dependencies: []
+
+"""
+
+if not os.listdir(os.path.join(currentDirectory, metaFolder)):
+    f = open(os.path.join(currentDirectory,
+             metaFolder, "main.yml"), "a")
+    f.write(content)
+    f.close()
+
+
+# Init Files/Templates folder
+
+listOfDirectoriesToInitKeep = [
+    "files", "templates"
+]
+
+for directory in listOfDirectoriesToInitKeep:
+
+    keepFileToCreate = os.path.join(currentDirectory, directory, ".keep")
+    parentFolder = os.path.join(currentDirectory, directory)
+    if not os.listdir(directory):
+        f = open(keepFileToCreate, "a")
+        f.close()
+    else:
+        print("Directory not empty : " + parentFolder)
+
+
+# Init example of tasks
+
+taskFolder = "tasks"
+
+content = """---
+
+- include: example.yml
+  tags:
+    - yourrole_example
+    - yourrole"""
+
+if not os.listdir(os.path.join(currentDirectory, taskFolder)):
+    f = open(os.path.join(currentDirectory,
+             taskFolder, "main.yml"), "a")
+    f.write(content)
+    f.close()
+
+# Git ignore initialization
+
+content = """test.retry
+terraform.tfstate
+terraform.tfstate.backup
+.terraform
+.vscode
+.idea
+vault.pw
+variables.tfvars
+variables.tfvars.model
+id_rsa
+.terraform.lock.hcl
+         """
+
+gitIgnoreToCreate = os.path.join(currentDirectory, ".gitignore")
+
+if os.path.isfile(gitIgnoreToCreate):
+    print("Gitignore already created")
+else:
+    f = open(gitIgnoreToCreate, "a")
+    f.write(content)
+    f.close
+
+
+# Yamllint initialization
+
+content = """# Based on ansible-lint config
+extends: default
+
+rules:
+  braces:
+    max-spaces-inside: 1
+    level: error
+  brackets:
+    max-spaces-inside: 1
+    level: error
+  colons:
+    max-spaces-after: -1
+    level: error
+  commas:
+    max-spaces-after: -1
+    level: error
+  comments: disable
+  comments-indentation: disable
+  document-start: disable
+  empty-lines:
+    max: 3
+    level: error
+  hyphens:
+    level: error
+  indentation: disable
+  key-duplicates: enable
+  line-length: disable
+  new-line-at-end-of-file: disable
+  new-lines:
+    type: unix
+  trailing-spaces: disable
+  truthy: disable"""
+
+yamllintToCreate = os.path.join(currentDirectory, ".yamllint")
+
+if os.path.isfile(yamllintToCreate):
+    print("Yammlint already created")
+else:
+    f = open(yamllintToCreate, "a")
+    f.write(content)
+    f.close
