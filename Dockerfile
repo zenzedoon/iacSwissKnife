@@ -98,7 +98,7 @@ RUN chmod 777 /usr/bin/iacSKRoleInit && \
     chmod 777 /usr/bin/iacSKVERSION
 ################################
 # Install SQLcmd - Mongosh - 
-################################
+#################################
 
 # Install prerequisites for PostgreSQL, MongoDB, and SQL Server tools
 RUN apt-get update && apt-get install -y --no-install-recommends \
