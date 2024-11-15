@@ -1,3 +1,0 @@
-#!/bin/bash
-figlet IaCBddTools Docker Tool | lolcat
-echo "POWERED BY: Zied BEN SALEM / Docker version --> iactools: $iacSKVERSION" | /usr/games/cowsay -f dragon-and-cow | lolcat 

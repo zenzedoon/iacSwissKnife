@@ -1,0 +1,77 @@
+######################################
+#               SSH AGENT            #
+######################################
+
+SSH_ENV="$HOME/.ssh/environment"
+
+function start_agent {
+    echo "Initializing new SSH agent..."
+    touch $SSH_ENV
+    chmod 600 "${SSH_ENV}"
+    /usr/bin/ssh-agent | sed 's/^echo/#echo/' >> "${SSH_ENV}"
+    . "${SSH_ENV}" > /dev/null
+    /usr/bin/ssh-add
+}
+
+# Source SSH settings, if applicable
+if [ -f "${SSH_ENV}" ]; then
+    . "${SSH_ENV}" > /dev/null
+    kill -0 $SSH_AGENT_PID 2>/dev/null || {
+        start_agent
+    }
+else
+    start_agent
+fi
+######################################
+#             DOCKER SETUP           #
+######################################
+
+IaCIMG=zenzedoon/iacbddtools
+IaCVERSION=1.0.0
+
+######################################
+#              MISC ALIAS            #
+######################################
+
+alias iacHelp='docker run -t --rm "$IaCIMG":"$IaCVERSION" cat /tmp/IacHelp | lolcat -F 1'
+alias iacVersion='docker run -t -e IaCVERSION=$IaCVERSION --rm "$IaCIMG":"$IaCVERSION" IaCVERSION'
+alias iacRoleInit='docker run -it -v "${PWD}":/work -v ~/.ssh:/root/.ssh -v $(dirname $SSH_AUTH_SOCK):$(dirname $SSH_AUTH_SOCK) -e SSH_AUTH_SOCK=$SSH_AUTH_SOCK --rm "$IaCIMG":"$IaCVERSION" /bin/bash -c "python3 /usr/bin/iacRoleInit ; chown -R $(id -u):$(id -g) ./* ./.[!.]*"'
+
+
+######################################
+#             SETUP ALIAS            #
+######################################
+
+alias iacInit='docker run -t -v ~/:/work -v /usr/local/bin/:/usr/local/bin/ --rm "$IaCIMG":"$IaCVERSION" /bin/bash -c "mkdir -p \`cat /tmp/FoldersToCreate\` ; touch \`cat /tmp/FilesToCreate\` ; chown -R $(id -u):$(id -g) \`cut -d"/" -f1 /tmp/FoldersToCreate /tmp/FilesToCreate\` ; cat /tmp/vsansible-vault > /usr/local/bin/vsansible-vault ; chmod +x /usr/local/bin/vsansible-vault"'
+alias iacPullAliasBashrc='docker run -d --name tmp --rm "$IaCIMG":"$IaCVERSION" /bin/sh -c "wget https://raw.githubusercontent.com/zenzedoon/iacbddtools/main/IaCAliaces && cp IaCAliaces ~/.IaCAliaces && source ~/.bashrc "'
+
+
+######################################
+#            ANSIBLE ALIAS           #
+######################################
+
+alias ansible='docker run -ti -v "${PWD}":/work --rm "$IaCIMG":"$IaCVERSION" ansible'
+alias ansible-config='docker run -ti -v "${PWD}":/work --rm "$IaCIMG":"$IaCVERSION" ansible-config'
+alias ansible-connection='docker run -ti -v "${PWD}":/work --rm "$IaCIMG":"$IaCVERSION" ansible-connection'
+alias ansible-console='docker run -ti -v "${PWD}":/work --rm "$IaCIMG":"$IaCVERSION" ansible-console'
+alias ansible-doc='docker run -ti -v "${PWD}":/work --rm "$IaCIMG":"$IaCVERSION" ansible-doc'
+alias ansible-inventory='docker run -ti -v "${PWD}":/work --rm "$IaCIMG":"$IaCVERSION" ansible-inventory'
+alias ansible-lint='docker run -ti -v "${PWD}":/work --rm "$IaCIMG":"$IaCVERSION" ansible-lint'
+alias ansible-nwd='docker run -ti -v "${PWD}":"${PWD}" -w "${PWD}" --user "$(id -u):$(id -g)" --rm "$IaCIMG":"$IaCVERSION" ansible-nwd'
+alias ansible-pull='docker run -ti -v "${PWD}":/work --rm "$IaCIMG":"$IaCVERSION" ansible-pull'
+alias ansible-test='docker run -ti -v "${PWD}":/work --rm "$IaCIMG":"$IaCVERSION" ansible-test'
+alias ansible-playbook='docker run -ti -v "${PWD}":/work -v ~/.ansible/roles:/root/.ansible/roles -v ~/.ssh:/root/.ssh -v $(dirname $SSH_AUTH_SOCK):$(dirname $SSH_AUTH_SOCK) -e SSH_AUTH_SOCK=$SSH_AUTH_SOCK --rm "$IaCIMG":"$IaCVERSION" ansible-playbook'
+alias ansible-vault='docker run -ti -v "${PWD}":/work -v ~/.ansible/tmp:/.ansible/tmp --user "$(id -u):$(id -g)" --rm "$IaCIMG":"$IaCVERSION" ansible-vault'
+alias ansible-galaxy='docker run -ti -v "${PWD}":/work -v ~/.ansible/roles:/root/.ansible/roles -v ~/.ssh:/root/.ssh -v $(dirname $SSH_AUTH_SOCK):$(dirname $SSH_AUTH_SOCK) -e SSH_AUTH_SOCK=$SSH_AUTH_SOCK --rm "$IaCIMG":"$IaCVERSION" ansible-galaxy'
+
+######################################
+#      TERRAFORM/MOLECULE ALIAS      #
+######################################
+
+alias molecule='docker run -ti -v "${PWD}":"${PWD}" -w "${PWD}" -v ~/.ssh:/root/.ssh -v ~/.azure:/root/.azure -v ~/.aws:/root/.aws:ro -v ~/.ansible/roles:/root/.ansible/roles -v ~/.cache/molecule:/root/.cache/molecule -v /tmp:/tmp -v $(dirname $SSH_AUTH_SOCK):$(dirname $SSH_AUTH_SOCK) -e SSH_AUTH_SOCK=$SSH_AUTH_SOCK --rm "$IaCIMG":"$IaCVERSION" molecule'
+alias terraform='docker run -ti -v "${PWD}":/work -v ~/.ssh:/root/.ssh -v ~/.azure:/root/.azure -v ~/.aws:/root/.aws:ro -v ~/.config/openstack:/root/.config/openstack:ro -v ~/.ovh.config:/root/.ovh.config:ro -v ~/.terraformrc:/root/.terraformrc:ro -v $(dirname $SSH_AUTH_SOCK):$(dirname $SSH_AUTH_SOCK) -e SSH_AUTH_SOCK=$SSH_AUTH_SOCK --rm "$IaCIMG":"$IaCVERSION" terraform'
+alias terraform-docs='docker run -ti -v "${PWD}":/work --user "$(id -u):$(id -g)" --rm "$IaCIMG":"$IaCVERSION" terraform-docs'
+alias git='docker run -ti -v "${PWD}":/work -v ~/.ssh:/root/.ssh -v $(dirname $SSH_AUTH_SOCK):$(dirname $SSH_AUTH_SOCK) -e SSH_AUTH_SOCK=$SSH_AUTH_SOCK --rm "$IaCIMG":"$IaCVERSION" git'
+alias aws='docker run -ti -v "${PWD}":/work -v ~/.ssh:/root/.ssh -v ~/.aws:/root/.aws -v $(dirname $SSH_AUTH_SOCK):$(dirname $SSH_AUTH_SOCK) -e SSH_AUTH_SOCK=$SSH_AUTH_SOCK --rm "$IaCIMG":"$IaCVERSION" aws'
+alias az='docker run -ti -v "${PWD}":/work -v ~/.ssh:/root/.ssh -v ~/.azure:/root/.azure -v $(dirname $SSH_AUTH_SOCK):$(dirname $SSH_AUTH_SOCK) -e SSH_AUTH_SOCK=$SSH_AUTH_SOCK --rm "$IaCIMG":"$IaCVERSION" az'
+alias kubectl ='docker run -ti -v "${PWD}":/work -v ~/.ssh:/root/.ssh -v ~/.azure:/root/.azure -v $(dirname $SSH_AUTH_SOCK):$(dirname $SSH_AUTH_SOCK) -e SSH_AUTH_SOCK=$SSH_AUTH_SOCK --rm "$IaCIMG":"$IaCVERSION" kubectl'

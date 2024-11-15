@@ -91,11 +91,11 @@ RUN \
 # Config files
 ################################
 COPY ./BinFiles/* /usr/bin/ 
-COPY ./iacSKHelp /tmp/iacSKHelp
+COPY ./iacBDDHelp /tmp/iacBDDHelp
 COPY ./ConfigFiles/* /tmp/
-RUN chmod 777 /usr/bin/iacSKRoleInit && \
-    sed -i -e 's/\r$//' /usr/bin/iacSKVERSION && \
-    chmod 777 /usr/bin/iacSKVERSION
+RUN chmod 777 /usr/bin/iacBDDRoleInit && \
+    sed -i -e 's/\r$//' /usr/bin/iacBDDVERSION && \
+    chmod 777 /usr/bin/iacBDDVERSION
 ################################
 # Install SQLcmd - Mongosh - 
 #################################

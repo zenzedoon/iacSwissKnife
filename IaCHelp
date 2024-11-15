@@ -1,26 +1,26 @@
- iacSKHelp
+ IaCHelp
 -------------------------------------------------------------------------------------
 
-- iacSKVersion
+- iacVERSION
 
     Display the docker iac image you are using.
 
 -------------------------------------------------------------------------------------
 
-- iacSKRoleInit
+- iacRoleInit
 
     Create/Update an ansible role whit ansible file tree, .gitignore and molecule
 
 -------------------------------------------------------------------------------------
 
-- iacSKInit
+- iacInit
 
     Initialise all folders and files needed inside your Ubuntu/Debian/Mac for docker.
     To run only if: you have newly installed docker iac or you have deleted some required files/folders.
 
 -------------------------------------------------------------------------------------
 
-- iacSKPullAliasBashrc
+- iacPullAliasBashrc
 
     Download/Update aliases used to run docker and source them.
     !!! Run only if you are using bashrc shell !!!
