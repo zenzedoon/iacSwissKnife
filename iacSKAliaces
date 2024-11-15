@@ -26,7 +26,7 @@ fi
 #             DOCKER SETUP           #
 ######################################
 
-iacSKIMG=zenzedoon/iacswissknife
+iacSKIMG=zenzedoon/iacbddtools
 iacSKVERSION=v1.0
 
 ######################################
@@ -43,7 +43,7 @@ alias iacSKRoleInit='docker run -it -v "${PWD}":/work -v ~/.ssh:/root/.ssh -v $(
 ######################################
 
 alias iacSKInit='docker run -t -v ~/:/work -v /usr/local/bin/:/usr/local/bin/ --rm "$iacSKIMG":"$iacSKVERSION" /bin/bash -c "mkdir -p \`cat /tmp/FoldersToCreate\` ; touch \`cat /tmp/FilesToCreate\` ; chown -R $(id -u):$(id -g) \`cut -d"/" -f1 /tmp/FoldersToCreate /tmp/FilesToCreate\` ; cat /tmp/vsansible-vault > /usr/local/bin/vsansible-vault ; chmod +x /usr/local/bin/vsansible-vault"'
-alias iacSKPullAliasBashrc='docker run -d --name tmp --rm "$iacSKIMG":"$iacSKVERSION" /bin/sh -c "wget https://raw.githubusercontent.com/zenzedoon/iacSwissKnife/main/iacSKAliaces && cp iacSKAliaces ~/.iacSKAliaces && source ~/.bashrc "'
+alias iacSKPullAliasBashrc='docker run -d --name tmp --rm "$iacSKIMG":"$iacSKVERSION" /bin/sh -c "wget https://raw.githubusercontent.com/zenzedoon/iacbddtools/main/iacSKAliaces && cp iacSKAliaces ~/.iacSKAliaces && source ~/.bashrc "'
 
 
 ######################################

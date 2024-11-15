@@ -2,6 +2,11 @@ FROM python:slim-bullseye
 LABEL maintainer="Zied BEN SALEM"
 WORKDIR /work
 ################################
+#####  Env Variables ###########
+################################
+ENV DEBIAN_FRONTEND=noninteractive
+
+################################
 # Install tools
 ################################
 RUN \
@@ -48,9 +53,7 @@ RUN \
 ################################
 RUN \
     # pip install awscli --upgrade --user && \ 
-    apt-get install awscli &&\
-    # add aws cli location to path
-    # PATH=~/.local/bin:$PATH  && \
+    apt-get install -y awscli &&\
     # Check that aws is installed 
     aws --version
 
@@ -93,3 +96,33 @@ COPY ./ConfigFiles/* /tmp/
 RUN chmod 777 /usr/bin/iacSKRoleInit && \
     sed -i -e 's/\r$//' /usr/bin/iacSKVERSION && \
     chmod 777 /usr/bin/iacSKVERSION
+################################
+# Install SQLcmd - Mongosh - 
+################################
+
+# Install prerequisites for PostgreSQL, MongoDB, and SQL Server tools
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    gnupg \
+    apt-transport-https \
+    && curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
+    && curl https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list \
+    && curl -fsSL https://pgp.mongodb.com/server-6.0.asc | gpg --dearmor -o /usr/share/keyrings/mongodb-archive-keyring.gpg \
+    && echo "deb [signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg] https://repo.mongodb.org/apt/debian bullseye/mongodb-org/6.0 main" \
+    | tee /etc/apt/sources.list.d/mongodb-org-6.0.list \
+    && curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
+    && echo "deb http://apt.postgresql.org/pub/repos/apt bullseye-pgdg main" \
+    | tee /etc/apt/sources.list.d/pgdg.list
+
+# Install sqlcmd, mongosh, PostgreSQL client tools, and clean up
+RUN apt-get update && ACCEPT_EULA=Y apt-get install -y \
+    msodbcsql17 \
+    mssql-tools \
+    mongodb-mongosh \
+    unixodbc-dev \
+    postgresql-client \
+    && echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> /etc/bash.bashrc \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Update PATH to include sqlcmd, mongosh, and PostgreSQL tools
+ENV PATH="$PATH:/opt/mssql-tools/bin"
